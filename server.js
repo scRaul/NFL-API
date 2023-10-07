@@ -51,7 +51,7 @@ server.get("/", async (req, res) => {
     if (!matchData) {
       throw new Error("api not available");
     } else {
-      res.render("Pages/home", { matchData });
+      res.render("Pages/index", { matchData });
     }
   } catch (error) {
     console.error(error);
