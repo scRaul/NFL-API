@@ -1,5 +1,7 @@
 module.exports = class Match{
-    constructor(matchName, teamHome, teamAway, homeLogo, awayLogo, homeScore, awayScore, week, status) {
+    stadiumImg;
+    constructor(id,matchName, teamHome, teamAway, homeLogo, awayLogo, homeScore, awayScore, week, status,date,venueId) {
+        this.id = id;
         this.matchName = matchName;
         this.teamHome = teamHome;
         this.teamAway = teamAway;
@@ -9,5 +11,7 @@ module.exports = class Match{
         this.awayScore = awayScore;
         this.week = week;
         this.status = status;
+        this.date = date;
+        this.venueId = venueId;
       }
 };

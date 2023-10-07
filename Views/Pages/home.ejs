@@ -1,56 +1,97 @@
 <!-- Corrected HTML with single quotes for id attributes -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NFL SCORES</title>
-    <link href="/CSS/game.css" rel="stylesheet">
-</head>
-<body>
+    <link href="/CSS/game.css" rel="stylesheet" />
+    <link href="/CSS/nav.css" rel="stylesheet" />
+  </head>
+  <body>
     <header>
-        <h1>Stream Score</h1>
+      <nav>
+        <h3>LiveScoreHub</h3>
+        <div class="nav-items">
+          <a href="#">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <a href="#">6</a>
+          <a href="#">7</a>
+          <a href="#">8</a>
+          <a href="#">9</a>
+          <a href="#">10</a>
+          <a href="#">11</a>
+          <a href="#">12</a>
+          <a href="#">13</a>
+          <a href="#">14</a>
+          <a href="#">15</a>
+        </div>
+        <span></span>
+      </nav>
     </header>
     <main>
-        <div class="content">
-            <% if (matchData) { %>
-                <!-- Render content if matchData exists -->
-                <% matchData.forEach((game, index) => { %>
-                    <div class="game-container">
-                        <div class="left-section">
-                         <img class="team-logo" src="<%= game.homeLogo %>" alt="<%= game.teamHome %> Logo" width="100">
-                         <span id="home-score-<%= index %>" class="score"><%= game.homeScore %></span>
-                        </div>
-                        <div class="mid-section">
-                            <span id="clock-<%= index %>" class="clock"><%= game.status.displayClock %></span>
-                            <span id="period-<%= index %>" class="period"><%= game.status.period %></span>
-                        </div>
-                        <div class="right-section">
-                            <span id="away-score-<%= index %>" class="score"><%= game.awayScore %></span>
-                            <img class="team-logo" src="<%= game.awayLogo %>" alt="<%= game.teamAway %> Logo" width="100">
-                        </div>
-                    </div>
-                <% }); %>
-            <% } else { %>
-                <!-- Render alternative content if matchData is not available -->
-                <h1>No Match Data Available</h1>
-            <% } %>
+      <div class="content">
+        <% if (matchData) { %>
+        <!-- Render content if matchData exists -->
+        <% matchData.forEach((game, index) => { %>
+        <div class="game-container" >
+          <div class="left-section">
+            <span id="away-score-<%= index %>" class="score"
+              ><%= game.awayScore %></span
+            >
+            <img
+              class="team-logo"
+              src="<%= game.awayLogo %>"
+              alt="<%= game.teamAway %> Logo"
+            />
+          </div>
+          <div class="mid-section">
+            <span id="clock-<%= index %>" class="clock"
+              ><%= game.status.displayClock %></span
+            >
+            <span id="period-<%= index %>" class="period"
+              ><%= game.status.period %></span
+            >
+            <p class="match"><%= game.matchName %></p>
+          </div>
+          <div class="right-section">
+            <img
+              class="team-logo"
+              src="<%= game.homeLogo %>"
+              alt="<%= game.teamHome %> Logo"
+            />
+            <span id="home-score-<%= index %>" class="score"
+              ><%= game.homeScore %></span
+            >
+          </div>
         </div>
+        <% }); %> <% } else { %>
+        <!-- Render alternative content if matchData is not available -->
+        <h1>No Match Data Available</h1>
+        <% } %>
+      </div>
     </main>
 
     <script>
-        const eventSource = new EventSource('/sse');
-      
-        eventSource.onmessage = (event) => {
-          const data = JSON.parse(event.data);
+    //   const eventSource = new EventSource("/sse");
 
-          data.forEach((game, index) => {
-             document.getElementById(`home-score-${index}`).textContent = game.homeScore;
-             document.getElementById(`away-score-${index}`).textContent = game.awayScore;
-             document.getElementById(`clock-${index}`).textContent = game.status.displayClock;
-             document.getElementById(`period-${index}`).textContent = game.status.period;
-          });
-        };
+    //   eventSource.onmessage = (event) => {
+    //     const data = JSON.parse(event.data);
+
+    //     data.forEach((game, index) => {
+    //       document.getElementById(`home-score-${index}`).textContent =
+    //         game.homeScore;
+    //       document.getElementById(`away-score-${index}`).textContent =
+    //         game.awayScore;
+    //       document.getElementById(`clock-${index}`).textContent =
+    //         game.status.displayClock;
+    //       document.getElementById(`period-${index}`).textContent =
+    //         game.status.period;
+    //     });
+    //   };
     </script>
-</body>
+  </body>
 </html>
