@@ -2,7 +2,7 @@ const {asyncFetch} = require('../Util/asyncFetch');
 const Match = require('../Models/Match');
 
 exports.getCurrentScores = async (req,res,next) =>{
-      res.redirect('/api/nfl/scores/wk/thisweek');
+      res.redirect('/api/nfl/scores/thisweek');
 }
 exports.getScores = async (req,res,next) =>{
    let week = req.params.num;
@@ -26,7 +26,7 @@ exports.getScores = async (req,res,next) =>{
        game.competitions[0].competitors[1].team.logo,
        game.competitions[0].competitors[0].score,
        game.competitions[0].competitors[1].score,
-       game.week,
+       game.week.number,
        game.status,
        game.date,
        game.competitions[0].venue.id

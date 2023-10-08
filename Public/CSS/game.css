@@ -133,3 +133,17 @@ body{
         
     }
 }
+
+.flash {
+    animation: flash 2s cubic-bezier(0.4, 2.3, 0.4, -0.8) infinite;
+  }
+  
+  @keyframes flash {
+    0% {
+      background-color: yellow;
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  

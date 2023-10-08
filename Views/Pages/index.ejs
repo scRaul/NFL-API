@@ -10,14 +10,15 @@
   </head>
   <body>
     <header>
-    <%- include('../Components/nav') %>
+      <%- include('../Components/nav', { week:matchData[0].week, currentWeek:
+      matchData[0].week }) %>
     </header>
     <main>
       <div class="content">
         <% if (matchData) { %>
         <!-- Render content if matchData exists -->
         <% matchData.forEach((game, index) => { %>
-        <div class="game-container" >
+        <div class="game-container">
           <div class="left-section">
             <span id="away-score-<%= index %>" class="score"
               ><%= game.awayScore %></span
@@ -29,11 +30,11 @@
             />
           </div>
           <div class="mid-section">
-            <span id="clock-<%= index %>" class="clock"
-              ><%= game.status.displayClock %></span
-            >
             <span id="period-<%= index %>" class="period"
               ><%= game.status.period %></span
+            >
+            <span id="clock-<%= index %>" class="clock"
+              ><%= game.status.displayClock %></span
             >
             <p class="match"><%= game.matchName %></p>
           </div>
@@ -56,22 +57,46 @@
     </main>
 
     <script>
-    //   const eventSource = new EventSource("/sse");
+     const eventSource = new EventSource("/sse");
+let prevData = undefined;
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  if (prevData === undefined) {
+    prevData = data;
+  }
+  
+  for (let index = 0; index < data.length; index++) {
+    const game = data[index];
+    const prev = prevData[index];
+    
+    const homeScore = document.getElementById(`home-score-${index}`);
+    const awayScore = document.getElementById(`away-score-${index}`);
+    const clock = document.getElementById(`clock-${index}`);
+    const period = document.getElementById(`period-${index}`);
+    
+    function updateElement(element, prevValue, newValue) {
+      if (prevValue !== newValue) {
+        element.classList.add("flash");
+        setTimeout(() => {
+          element.classList.remove("flash");
+        }, 2000); // Adjust the timeout as needed
+      }
+    }
+    
+    updateElement(homeScore, prev.homeScore, game.homeScore);
+    updateElement(awayScore, prev.awayScore, game.awayScore);
+    updateElement(clock, prev.status.displayClock, game.status.displayClock);
+    updateElement(period, prev.status.period, game.status.period);
+    
+    homeScore.textContent = game.homeScore;
+    awayScore.textContent = game.awayScore;
+    clock.textContent = game.status.displayClock;
+    period.textContent = game.status.period;
+  }
+  
+  prevData = data;
+};
 
-    //   eventSource.onmessage = (event) => {
-    //     const data = JSON.parse(event.data);
-
-    //     data.forEach((game, index) => {
-    //       document.getElementById(`home-score-${index}`).textContent =
-    //         game.homeScore;
-    //       document.getElementById(`away-score-${index}`).textContent =
-    //         game.awayScore;
-    //       document.getElementById(`clock-${index}`).textContent =
-    //         game.status.displayClock;
-    //       document.getElementById(`period-${index}`).textContent =
-    //         game.status.period;
-    //     });
-    //   };
     </script>
   </body>
 </html>
