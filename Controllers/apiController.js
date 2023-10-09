@@ -9,7 +9,7 @@ exports.getScores = async (req,res,next) =>{
    let query = (week == 'thisweek') ? "" : `?dates=2023&seasontype=2&week=${week}`;
    let url = `http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard${query}`;
    let scoreData = await asyncFetch(url);
-   if(!scoreData){
+   if (!scoreData || !Array.isArray(scoreData.events)) {
       const error = new Error("unable to connect to api");
       error.status = 500;
       return next(error);
@@ -40,5 +40,22 @@ exports.getScores = async (req,res,next) =>{
 
    res.status(200).json(matches);
 }
-//play by play 
-//https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401249063/competitions/401249063/plays?limit=300
+exports.getPlayByPlay = async (req,res,next) =>{
+   let gameId = req.params.gameId;
+   let url = `https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/${gameId}/competitions/${gameId}/plays?limit=500`
+   let gameData = await asyncFetch(url);
+   if(!gameData){
+      const error = new Error("unable to connect to api");
+      error.status = 500;
+      return next(error);
+   }
+   let plays = [];
+   for(const play of gameData.items){
+      plays.push(play.alternativeText);
+   }
+
+
+   res.status(200).json(plays);
+
+
+}

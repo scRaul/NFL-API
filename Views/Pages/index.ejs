@@ -18,7 +18,7 @@
         <% if (matchData) { %>
         <!-- Render content if matchData exists -->
         <% matchData.forEach((game, index) => { %>
-        <div class="game-container">
+          <div class="game-container" style="cursor: pointer;" onclick="goToMatch('<%= game.id %>')">
           <div class="left-section">
             <span id="away-score-<%= index %>" class="score"
               ><%= game.awayScore %></span
@@ -57,6 +57,11 @@
     </main>
 
     <script>
+
+     function goToMatch(gameId){
+      window.location.href = `nfl/game/${gameId}`; 
+     }
+
      const eventSource = new EventSource("/sse");
 let prevData = undefined;
 eventSource.onmessage = (event) => {
@@ -98,5 +103,6 @@ eventSource.onmessage = (event) => {
 };
 
     </script>
+       <script src="/JS/nav.js"></script>
   </body>
 </html>
