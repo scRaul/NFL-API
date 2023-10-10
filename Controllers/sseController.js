@@ -2,6 +2,7 @@ const { asyncFetch } = require("../Util/asyncFetch");
 
 const url  = "http://localhost:8080";
 const activeClients = new Set();
+let prevScoreUpdate = undefined;
 exports.serveGameScores = (req, res) =>{
     // Set SSE headers
     if (!activeClients.has(res)) {
@@ -15,7 +16,6 @@ exports.serveGameScores = (req, res) =>{
     const sendLiveScoreUpdate = async () => {
       try {
         if (!activeClients.has(res)) {
-          // The client is no longer active, stop sending updates
           clearInterval(updateInterval);
           return;
         }
@@ -23,12 +23,17 @@ exports.serveGameScores = (req, res) =>{
         // Fetch live score data from your API
         const liveScore = await asyncFetch(`${url}/api/nfl/scores`);
         if (liveScore) {
-          // Send the data as an SSE event
-          res.write(`data: ${JSON.stringify(liveScore)}\n\n`);
+          if (prevScoreUpdate === undefined) {
+            prevScoreUpdate = liveScore;
+            res.write(`data: ${JSON.stringify(liveScore)}\n\n`);
+          } else if (JSON.stringify(prevScoreUpdate) !== JSON.stringify(liveScore)) {
+            prevScoreUpdate = liveScore;
+            res.write(`data: ${JSON.stringify(liveScore)}\n\n`);
+          }
         }
-      } catch (error) {
+      }  catch (error) {
         console.error("Error fetching live score:", error);
-      }
+      } 
     };
    //10s / 2 == 5 s
     const updateInterval = setInterval(sendLiveScoreUpdate, 10000 / 2);

@@ -11,31 +11,19 @@
 <body>
 
     <header>
-        <%- include('../Components/nav', { week: week, currentWeek:week}) %>
+        <%- include('../Components/nav', { week: matchData[0].week, currentWeek:week}) %>
     </header>
 
     <main>
-        <div class="game-container">
-            <div class="left-section">
-               <span> Raiders </span>
-               <span> Score </span>
-            </div>
-            <div class="mid-section">
-                <span class="period">2 </span>
-                  <span class="clock"
-                    >0.00</span>
-                  <p class="match"> RAID VS GB </p>
-            </div>
-            <div class="right-section">
-                <span> Score </span>
-                <span> Greeen bay </span>
-            </div>
-        </div>
+        <% const theGame = matchData.filter(match => match.id === gameId); %>
+        <%- include('../Components/match', { matchData: theGame }) %>        
         <div id="plays">
             <% for(let i = 0; i < plays.length; i++) { %>
               <p><%= plays[i] %></p>
             <% } %>
           </div>
+          <% const filteredMatchData = matchData.filter(match => match.id != gameId); %>
+          <%- include('../Components/match', { matchData: filteredMatchData }) %>      
           
     </main>
     <script>
@@ -53,6 +41,8 @@
         console.error('Error parsing JSON:', error);
     }
     const playsSource = new EventSource(`/sse/plays/${gameId}`);
+    const scoresSource = new EventSource(`/sse/scores`);
+
     playsSource.onmessage = (event) => {
         const data = JSON.parse(event.data);    
 
@@ -68,6 +58,5 @@
         });
     };
     </script>
-     <script src="/JS/nav.js"></script>
 </body>
 </html>

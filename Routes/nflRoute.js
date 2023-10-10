@@ -20,15 +20,16 @@ router.get('/',async (req, res,next) => {
       next(error);
     }
 });
-//401547354
+
 router.get('/game/:gameId', async (req,res,next)=>{
     let gameId = req.params.gameId;
     try {
         let gameData = await asyncFetch(`${URL}/api/nfl/game/${gameId}`);
-        if (!gameData) {
+        let matchData = await asyncFetch(`${URL}/api/nfl/scores`);
+        if (!gameData || !matchData) {
           throw new Error("api not available");
         } else {
-          res.status(200).render('Pages/game',{week: currentWeek,plays: gameData});
+          res.status(200).render('Pages/game',{week: currentWeek,plays: gameData,matchData,gameId});
         }
       } catch (error) {
         console.error(error);

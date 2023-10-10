@@ -15,40 +15,7 @@
     </header>
     <main>
       <div class="content">
-        <!-- Render content if matchData exists -->
-        <% matchData.forEach((game, index) => { %>
-          <div class="game-container" style="cursor: pointer;" onclick="goToMatch('<%= game.id %>')">
-          <div class="left-section">
-            <span id="away-score-<%= index %>" class="score"
-              ><%= game.awayScore %></span
-            >
-            <img
-              class="team-logo"
-              src="<%= game.awayLogo %>"
-              alt="<%= game.teamAway %> Logo"
-            />
-          </div>
-          <div class="mid-section">
-            <span id="period-<%= index %>" class="period"
-              ><%= game.status.period %></span
-            >
-            <span id="clock-<%= index %>" class="clock"
-              ><%= game.status.displayClock %></span
-            >
-            <p class="match"><%= game.matchName %></p>
-          </div>
-          <div class="right-section">
-            <img
-              class="team-logo"
-              src="<%= game.homeLogo %>"
-              alt="<%= game.teamHome %> Logo"
-            />
-            <span id="home-score-<%= index %>" class="score"
-              ><%= game.homeScore %></span
-            >
-          </div>
-        </div>
-        <% }); %> 
+        <%- include('../Components/match',{matchData}) %>
       </div>
     </main>
 
@@ -58,47 +25,7 @@
       window.location.href = `nfl/game/${gameId}`; 
      }
 
-     const eventSource = new EventSource("/sse/scores");
-let prevData = undefined;
-eventSource.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  if (prevData === undefined) {
-    prevData = data;
-  }
-  
-  for (let index = 0; index < data.length; index++) {
-    const game = data[index];
-    const prev = prevData[index];
-    
-    const homeScore = document.getElementById(`home-score-${index}`);
-    const awayScore = document.getElementById(`away-score-${index}`);
-    const clock = document.getElementById(`clock-${index}`);
-    const period = document.getElementById(`period-${index}`);
-    
-    function updateElement(element, prevValue, newValue) {
-      if (prevValue !== newValue) {
-        element.classList.add("flash");
-        setTimeout(() => {
-          element.classList.remove("flash");
-        }, 2000); // Adjust the timeout as needed
-      }
-    }
-    
-    updateElement(homeScore, prev.homeScore, game.homeScore);
-    updateElement(awayScore, prev.awayScore, game.awayScore);
-    updateElement(clock, prev.status.displayClock, game.status.displayClock);
-    updateElement(period, prev.status.period, game.status.period);
-    
-    homeScore.textContent = game.homeScore;
-    awayScore.textContent = game.awayScore;
-    clock.textContent = game.status.displayClock;
-    period.textContent = game.status.period;
-  }
-  
-  prevData = data;
-};
-
     </script>
-       <script src="/JS/nav.js"></script>
+    <script src="/Public/match.js"></script>
   </body>
 </html>
