@@ -10,8 +10,8 @@ server.set("views", path.join(__dirname, "Views"));
 server.use(express.static("Public"));
 
 // SSE route to listen for live score updates
-const SSE = require('./Controllers/sseController');
-server.get("/sse", SSE.handleEvents);
+const sseRoute = require('./Routes/sseRoute');
+server.use("/sse",sseRoute);
 
 //Client routes
 server.get("/",(req,res,next)=>{

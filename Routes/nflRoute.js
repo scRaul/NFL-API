@@ -3,7 +3,7 @@ const router = express.Router();
 const { asyncFetch } = require("../Util/asyncFetch");
 const URL = "http://localhost:8080";
 
-let currentWeek;
+let currentWeek = 5;
 
 router.get('/',async (req, res,next) => {
   console.log("Accessed /nfl route");
@@ -23,13 +23,12 @@ router.get('/',async (req, res,next) => {
 //401547354
 router.get('/game/:gameId', async (req,res,next)=>{
     let gameId = req.params.gameId;
-    console.log(gameId);
     try {
         let gameData = await asyncFetch(`${URL}/api/nfl/game/${gameId}`);
         if (!gameData) {
           throw new Error("api not available");
         } else {
-          res.status(200).json(gameData);
+          res.status(200).render('Pages/game',{week: currentWeek,plays: gameData});
         }
       } catch (error) {
         console.error(error);

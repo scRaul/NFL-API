@@ -15,7 +15,6 @@
     </header>
     <main>
       <div class="content">
-        <% if (matchData) { %>
         <!-- Render content if matchData exists -->
         <% matchData.forEach((game, index) => { %>
           <div class="game-container" style="cursor: pointer;" onclick="goToMatch('<%= game.id %>')">
@@ -49,10 +48,7 @@
             >
           </div>
         </div>
-        <% }); %> <% } else { %>
-        <!-- Render alternative content if matchData is not available -->
-        <h1>No Match Data Available</h1>
-        <% } %>
+        <% }); %> 
       </div>
     </main>
 
@@ -62,7 +58,7 @@
       window.location.href = `nfl/game/${gameId}`; 
      }
 
-     const eventSource = new EventSource("/sse");
+     const eventSource = new EventSource("/sse/scores");
 let prevData = undefined;
 eventSource.onmessage = (event) => {
   const data = JSON.parse(event.data);
