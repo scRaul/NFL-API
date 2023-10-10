@@ -6,7 +6,6 @@ const URL = "http://localhost:8080";
 let currentWeek = 5;
 
 router.get('/',async (req, res,next) => {
-  console.log("Accessed /nfl route");
     try {
       let matchData = await asyncFetch(`${URL}/api/nfl/scores`);
       currentWeek = matchData[0].week;
@@ -46,7 +45,7 @@ router.get("/wk/:num", async (req,res,next) =>{
       if (!matchData) {
         throw new Error("api not available");
       } else {
-        res.render("Pages/week", { matchData:matchData,currentWeek:currentWeek,week:num });
+        res.render("Pages/index", {matchData});
       }
     } catch (error) {
       console.error(error);

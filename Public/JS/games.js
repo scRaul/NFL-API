@@ -27,6 +27,3 @@ eventSource.onmessage = (event) => {
   
   prevData = data;
 };
-
-console.log('mounted');
-alert('mounted');

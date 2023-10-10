@@ -10,6 +10,7 @@
         alt="<%= game.teamAway %> Logo"
       />
     </div>
+    <% if( useMid ) {%>
     <div class="mid-section">
       <span id="period-<%= game.id %>" class="period"
         ><%= game.status.period %></span
@@ -19,6 +20,7 @@
       >
       <p class="match"><%= game.matchName %></p>
     </div>
+    <%} %>
     <div class="right-section">
       <img
         class="team-logo"

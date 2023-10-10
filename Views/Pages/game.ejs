@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="/CSS/nav.css" rel="stylesheet">
+    <link href="/CSS/index.css" rel="stylesheet" />
     <link href="/CSS/game.css" rel="stylesheet" />
-    <link href="/CSS/plays.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -16,16 +16,19 @@
 
     <main>
         <% const theGame = matchData.filter(match => match.id === gameId); %>
-        <%- include('../Components/match', { matchData: theGame }) %>        
+        <%- include('../Components/games', { matchData: theGame, useMid: true }) %>        
         <div id="plays">
             <% for(let i = 0; i < plays.length; i++) { %>
               <p><%= plays[i] %></p>
             <% } %>
           </div>
-          <% const filteredMatchData = matchData.filter(match => match.id != gameId); %>
-          <%- include('../Components/match', { matchData: filteredMatchData }) %>      
-          
-    </main>
+        </main>
+          <div id="slide">
+            <% const filteredMatchData = matchData.filter(match => match.id != gameId); %>
+            <%- include('../Components/summary', { matchData: filteredMatchData}) %>      
+          </div>
+          <%- include('../Components/footer') %>
+    <script src="/JS/games.js"></script>
     <script>
     const playsContainer = document.getElementById('plays');
     playsContainer.scrollTop = playsContainer.scrollHeight;

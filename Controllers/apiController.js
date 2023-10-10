@@ -1,8 +1,22 @@
 const {asyncFetch} = require('../Util/asyncFetch');
 const Match = require('../Models/Match');
 
+let currentType = 2;
+let currentWeek = 1;
+let currentYear = 2023;
 exports.getCurrentScores = async (req,res,next) =>{
-      res.redirect('/api/nfl/scores/thisweek');
+      // let url = 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/';
+      // let seasonData = asyncFetch(url);
+      // if(!seasonData){
+      //    const error = new Error("unable to connect to api");
+      //    error.status = 500;
+      //    return next(error);
+      // }
+      // currentType = seasonData.$meta.parameters.seasontypes[0];
+      // currentYear = seasonData.$meta.parameters.season[0];
+      // currentWeek = seasonData.$meta.parameters.week[0];
+      res.redirect(`/api/nfl/scores/thisweek`);
+      next();
 }
 exports.getScores = async (req,res,next) =>{
    let week = req.params.num;
