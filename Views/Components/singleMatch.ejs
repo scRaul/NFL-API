@@ -1,0 +1,24 @@
+<hr>
+<div class="focal-match">
+    <div class="section">
+        <span id="away-score-<%= thisMatch.id %>" class="score"> <%= thisMatch.awayScore %></span>
+        <img
+          class="team-logo"
+          src="<%= thisMatch.awayLogo %>"
+          alt="<%= thisMatch.teamAway %> Logo"
+        />
+        </div>
+      <div class="section">
+      <span id="period-<%= thisMatch.id %>" class="period"><%= thisMatch.status.period %></span>
+      <span id="clock-<%= thisMatch.id %>" class="clock"></span><%= thisMatch.status.displayClock %></span>
+      <p class="match"><%= thisMatch.matchName %></p>
+    </div>
+    <div class="section">
+      <img
+        class="team-logo"
+        src="<%= thisMatch.homeLogo %>"
+        alt="<%= thisMatch.teamHome %> Logo"
+      />
+      <sapn id="home-score-<%= thisMatch.id %>" class="score"><%= thisMatch.homeScore %></span>
+      </div>
+</div>

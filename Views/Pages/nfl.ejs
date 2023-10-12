@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL</title>
+    <link href="/CSS/global.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <%-include('../Components/navigation',{seasonData}) %>
+
+    <div class="content">
+
+        <%-include('../Components/matches',{matchData}) %>
+        
+    </div>
+    <%-include('../Components/footer') %>
+    <script src="/JS/sseMatches.js"></script>
+</body>
+</html>

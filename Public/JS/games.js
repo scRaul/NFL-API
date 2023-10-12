@@ -1,3 +1,4 @@
+
 const eventSource = new EventSource("/sse/scores");
 eventSource.onmessage = (event) => {
   const data = JSON.parse(event.data);  
@@ -27,3 +28,4 @@ eventSource.onmessage = (event) => {
   
   prevData = data;
 };
+

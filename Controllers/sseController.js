@@ -1,82 +1,69 @@
 const { asyncFetch } = require("../Util/asyncFetch");
+const cache = require('../Data/Cache');
 
-const url  = "http://localhost:8080";
-const activeClients = new Set();
-let prevScoreUpdate = undefined;
-exports.serveGameScores = (req, res) =>{
-    // Set SSE headers
-    if (!activeClients.has(res)) {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
-      activeClients.add(res);
-    }
-  
-    // Function to send live score updates
-    const sendLiveScoreUpdate = async () => {
-      try {
-        if (!activeClients.has(res)) {
-          clearInterval(updateInterval);
-          return;
-        }
-  
-        // Fetch live score data from your API
-        const liveScore = await asyncFetch(`${url}/api/nfl/scores`);
-        if (liveScore) {
-          if (prevScoreUpdate === undefined) {
-            prevScoreUpdate = liveScore;
-            res.write(`data: ${JSON.stringify(liveScore)}\n\n`);
-          } else if (JSON.stringify(prevScoreUpdate) !== JSON.stringify(liveScore)) {
-            prevScoreUpdate = liveScore;
-            res.write(`data: ${JSON.stringify(liveScore)}\n\n`);
-          }
-        }
-      }  catch (error) {
-        console.error("Error fetching live score:", error);
-      } 
-    };
-   //10s / 2 == 5 s
-    const updateInterval = setInterval(sendLiveScoreUpdate, 10000 / 2);
-  
-    // Handle client disconnection
-    req.on("close", () => {
+
+exports.setHeader = (req,res,next) =>{
+  if( !cache.clients.has(res)){
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    cache.clients.add(res);
+  }
+  next();
+}
+// /sse/matches
+exports.getLiveScoreUpdates = (req,res) =>{
+
+  const sendUpdate = async () =>{
+    //stop loop interval if res isnt a client -> doenst have set headers 
+    if(!cache.clients.has(res)){
       clearInterval(updateInterval);
-      activeClients.delete(res); 
-      res.end(); 
-    });
-  };
-
-
-  exports.servePlays = (req, res) =>{
-    let gameId = req.params.gameId;
-    // Set SSE headers
-    if (!activeClients.has(res)) {
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
-      activeClients.add(res);
     }
-  
-    // Function to send live score updates
-    const sendLivePlayUpdate = async () => {
-      try {
-        if (!activeClients.has(res)) {
-          clearInterval(updateInterval);
-          return;
-        }
-        const livePlays = await asyncFetch(`${url}/api/nfl/game/${gameId}`);
-        if (livePlays) {
-          res.write(`data: ${JSON.stringify(livePlays)}\n\n`);
-        }
-      } catch (error) {
-        console.error("Error fetching live plays:", error);
+    try{
+      let liveMatches = await asyncFetch(`${cache.url}/api/nfl/matches`);
+      //send update if there is ones
+      if(JSON.stringify(liveMatches) != JSON.stringify(cache.prevLiveMatches)){
+        cache.prevLiveMatches = liveMatches;
+        res.write(`data: ${JSON.stringify(liveMatches)}\n\n`);
       }
-    };
-   //10s / 2 == 5 s
-    const updateInterval = setInterval(sendLivePlayUpdate, 10000 / 2);
-    req.on("close", () => {
-      clearInterval(updateInterval);
-      activeClients.delete(res); 
-      res.end(); 
-    });
+    }catch(error){
+      console.log(error);
+    }
   };
+  const updateInterval = setInterval(sendUpdate, 10000 / 4);
+
+  req.on("close", () => {
+    clearInterval(updateInterval);
+    cache.clients.delete(res); 
+    res.end(); 
+  });
+
+};
+// sse/plays/gameId;
+exports.getLivePlayUpdates = (req,res)=>{
+  let gameId = req.params.gameId;
+ 
+  const sendUpdate = async () =>{
+    //stop loop interval if res isnt a client -> doenst have set headers 
+    if(!cache.clients.has(res)){
+      clearInterval(updateInterval);
+    }
+    try{
+      let livePlays = await asyncFetch(`${cache.url}/api/nfl/game/${gameId}`);
+      //send update if there is ones
+      if(JSON.stringify(liveMatches) != JSON.stringify(cache.prevLiveMatches)){
+        cache.prevLiveMatches = liveMatches;
+        res.write(`data: ${JSON.stringify(liveMatches)}\n\n`);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  };
+  const updateInterval = setInterval(sendUpdate, 10000 / 4);
+
+  req.on("close", () => {
+    clearInterval(updateInterval);
+    cache.clients.delete(res); 
+    res.end(); 
+  });
+}

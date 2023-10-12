@@ -1,0 +1,45 @@
+<nav class="navigation">
+  <div id="logo-link"style="cursor: pointer;">
+      <h4>LiveScoreHub</h4>
+  </div>
+  <div class="nav-items">
+      <% let totalWeeks;
+      switch (seasonData.selectedType) {
+        case '1':
+          totalWeeks = seasonData.preWeeks;
+          break;
+        case '3':
+          totalWeeks = seasonData.postWeeks;
+          break;
+        default:
+          totalWeeks = seasonData.regWeeks;
+          break;
+      }
+
+      for (let i = 1; i <= totalWeeks; i++) { 
+        let query =  `?season=${seasonData.year}&type=${seasonData.selectedType}&week=${i}`;
+        if( i == seasonData.selectedWeek ){
+        %>
+          <a href='/nfl<%=query%>' style="color:yellow">
+            <%}else{%>
+              <a href='/nfl<%=query%>'>
+            <%}%>
+            
+              <%= i %>
+          </a>
+      <% } %>
+  </div>
+</nav>
+<script>
+  const liveScoreLink = document.getElementById("logo-link");
+  liveScoreLink.addEventListener("click", () => {
+  window.location.href = "/"; 
+});
+const seasonData = JSON.parse('<%- JSON.stringify(seasonData) %>');
+
+// global vaiable for sseMatches to check, if true set up server events else don't
+const IS_LIVE = (seasonData.year == new Date().getFullYear() &&
+                 seasonData.selectedWeek == seasonData.currentWeek && 
+                seasonData.selectedType == seasonData.currentType 
+                 );
+</script>

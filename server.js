@@ -2,7 +2,6 @@ require("dotenv").config;
 const express = require("express");
 const path = require("path");
 const server = express();
-const { asyncFetch } = require("./Util/asyncFetch");
 
 //templating language ejs
 server.set("view engine", "ejs");

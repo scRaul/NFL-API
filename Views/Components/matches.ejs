@@ -1,0 +1,31 @@
+<% matchData.forEach(game => { %>
+    <div class="match-container" style="cursor: pointer;" onclick="goToMatch('<%= game.id %>','<%= game.query %>')">
+      <div class="section">
+        <span id="away-score-<%= game.id %>" class="score"> <%= game.awayScore %></span>
+        <img
+          class="team-logo"
+          src="<%= game.awayLogo %>"
+          alt="<%= game.teamAway %> Logo"
+        />
+        </div>
+      <div class="section">
+      <span id="period-<%= game.id %>" class="period"><%= game.status.period %></span>
+      <span id="clock-<%= game.id %>" class="clock"></span><%= game.status.displayClock %></span>
+      <p class="match"><%= game.matchName %></p>
+    </div>
+    <div class="section">
+      <img
+        class="team-logo"
+        src="<%= game.homeLogo %>"
+        alt="<%= game.teamHome %> Logo"
+      />
+      <sapn id="home-score-<%= game.id %>" class="score"><%= game.homeScore %></span>
+      </div>
+      </div>
+  <% }); %> 
+
+  <script>
+    function goToMatch(gameId,gameQuery){
+      window.location.href = `http://localhost:8080/nfl/match/${gameId}/${gameQuery}`;
+    }
+  </script>
