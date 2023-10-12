@@ -46,6 +46,7 @@ exports.getSeasonData =  async (req,res,next) =>{
         cache.seasonCache.set(year,season);
         return res.status(200).json(season);
     }catch(error){
+        console.log('49');
         console.log(error);
         next(error);
     }
@@ -111,6 +112,7 @@ exports.getMatches = async (req,res,next) =>{
        }
         res.status(200).json(matches);
     }catch(error){
+        console.log('115');
         console.log(error);
         next(error);
     }
@@ -133,6 +135,7 @@ exports.getPlays = async (req,res,next) =>{
         }
         res.status(200).json(plays);
     }catch(error){  
+        console.log('138');
         console.log(error);
         next(error);
     } 

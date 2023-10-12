@@ -27,6 +27,7 @@ exports.getLiveScoreUpdates = (req,res) =>{
         res.write(`data: ${JSON.stringify(liveMatches)}\n\n`);
       }
     }catch(error){
+      console.log('sse30');
       console.log(error);
     }
   };
@@ -56,6 +57,7 @@ exports.getLivePlayUpdates = (req,res)=>{
         res.write(`data: ${JSON.stringify(liveMatches)}\n\n`);
       }
     }catch(error){
+      console.log('sse60');
       console.log(error);
     }
   };
