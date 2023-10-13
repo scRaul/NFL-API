@@ -1,5 +1,5 @@
 class Cache{
-    url = 'http://localhost:8080';
+    url = 'https://livescoreshub-0b21adb8d7e5.herokuapp.com';
     seasonCache = new Map(); //(year,Season)
     seasonMatchesCache = new Map(); //(query, [matches])
     clients = new Set();

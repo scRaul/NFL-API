@@ -29,10 +29,6 @@ server.use((error,req,res,next)=>{
   const status = error.statusCode || 500; 
   const message = error.message;
   const errors = error.errors? error.errors : [];
-  // res.status(status).json({
-  //    message : message,
-  //    errors : errors
-  // });
   res.status(status).send({status,errors,message});
 });
 
