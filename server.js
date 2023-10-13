@@ -33,7 +33,7 @@ server.use((error,req,res,next)=>{
   //    message : message,
   //    errors : errors
   // });
-  res.status(404).redirect('/nfl');
+  res.status(status).send(errors);
 });
 
 
