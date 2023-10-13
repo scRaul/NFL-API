@@ -33,7 +33,7 @@ server.use((error,req,res,next)=>{
   //    message : message,
   //    errors : errors
   // });
-  res.status(status).send(errors);
+  res.status(status).send({status,errors,message});
 });
 
 
