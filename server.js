@@ -24,16 +24,16 @@ const apiRoute = require("./Routes/apiRoute");
 server.use("/api", apiRoute);
 
 
-//Error Cather / Handler
+//Error Cather / Handler // we simply send them back to home page
 server.use((error,req,res,next)=>{
-  console.log(error);
   const status = error.statusCode || 500; 
   const message = error.message;
   const errors = error.errors? error.errors : [];
-  res.status(status).json({
-     message : message,
-     errors : errors
-  });
+  // res.status(status).json({
+  //    message : message,
+  //    errors : errors
+  // });
+  res.status(404).redirect('/nfl');
 });
 
 
